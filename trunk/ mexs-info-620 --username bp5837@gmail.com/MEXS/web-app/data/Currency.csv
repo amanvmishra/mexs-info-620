@@ -1,0 +1,3 @@
+currencyID, conversionRate, amount, countryCode
+1, 1.0, 0, USD
+2, 0.75, 0, EUR
