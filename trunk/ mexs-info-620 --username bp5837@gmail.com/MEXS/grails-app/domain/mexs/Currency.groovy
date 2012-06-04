@@ -3,9 +3,11 @@ package mexs
 class Currency {
 
 	int currencyID
-	double conversionRate
-	double amount
-	String countryCode
+	double buyingRate
+	double sellingRate
+	String currencyName
+	String countryName
+	String currencySymbol
 	
 	static hasMany = [sourceTransactions : Transaction, targetTransactions : Transaction]
     static mappedBy = [sourceTransactions : "sourceCurrencyID", targetTransactions : "targetCurrencyID"]

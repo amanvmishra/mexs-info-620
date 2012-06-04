@@ -21,9 +21,11 @@ class LoadDbService {
 		new File(rootDir +  'Currency.csv').toCsvReader(['skipLines': 1]).eachLine{
 			def currency = new Currency()
 			currency.currencyID = it[0].toInteger()
-			currency.conversionRate = it[1].toDouble()
-			currency.amount = it[2].toDouble()
-			currency.countryCode = it[3]
+			currency.buyingRate = it[1].toDouble()
+			currency.sellingRate = it[2].toDouble()
+			currency.currencyName = it[3]
+			currency.countryName = it[4]
+			currency.currencySymbol = it[5]
 			currency.save(flush:true)
 		}
 		

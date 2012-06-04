@@ -1,3 +1,4 @@
-currencyID, conversionRate, amount, countryCode
-1, 1.0, 0, USD
-2, 0.75, 0, EUR
+currencyID, buyingRate, sellingRate, currencyName, countryName, currencySymbol
+1, 1.0, 1.0, US Dollar, United States, USD
+2, 0.80, 1.23, Euro, Euro Member Countries, EUR
+3, 78.17, 0.01, Japanese Yen, Japan, JPY
