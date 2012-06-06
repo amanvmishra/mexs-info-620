@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   borderVisible="false">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Metadata>
+		[Name]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mexs.Currency;
+			import mexs.Transaction;
+			
+			import org.granite.tide.Component;
+
+			private var dummyCurrency:Currency;
+			private var dummyTransaction:Transaction;
+			
+			[In("mexs.transactionController")]
+			public var transactionController:Component;
+			
+			private function dataEntered_handler():void
+			{
+				this.parentApplication.currentState = 'verifyInfo';
+				this.parentApplication.verifyComponent.loadEnteredData(firstName.text, lastName.text, passportNum.text, country.text,
+																	srcAmount.text, srcDropDown.selectedItem, tgtDropDown.selectedItem);
+			}
+			
+			public function clearFields():void
+			{
+				firstName.text = "";
+				lastName.text = "";
+				passportNum.text = "";
+				country.text = "";
+				srcAmount.text = "";
+				srcDropDown.selectedItem = "";
+				tgtDropDown.selectedItem = "";
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Button id="multipleCurrenciesButton" label="Multiple Currencies" left="5"/>
+	<s:HGroup width="100%" height="60%" verticalCenter="0" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		<s:Panel id="patronInfo" width="100%" height="100%" title="Patron Information">
+			<s:Form id="patronForm">
+				<s:FormHeading fontSize="10" label="Enter Patron Information"/>
+				<mx:FormItem label="First Name">
+					<s:TextInput id="firstName" width="200"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="Last Name">
+					<s:TextInput id="lastName" width="200"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="Passport Number">
+					<s:TextInput id="passportNum" width="200"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="Country">
+					<s:TextInput id="country" width="200"/>
+				</mx:FormItem>
+			</s:Form>
+		</s:Panel>
+		<s:Panel id="currencyInfo" width="100%" height="100%" title="Currency Information">
+			<s:Form id="currencyForm">
+				<s:FormHeading fontSize="10" label="Enter Currency Information"/>
+				<mx:FormItemLabel text="Source Currency" fontWeight="bold"/>
+				<mx:FormItem label="   Amount">
+					<s:TextInput id="srcAmount" width="200"/>
+				</mx:FormItem>
+				<mx:FormItem label="   Currency Code">
+					<s:DropDownList id="srcDropDown" width="200" prompt="Select a Currency"/>
+				</mx:FormItem>
+				<mx:FormItemLabel text="Target Currency" fontWeight="bold"/>
+				<mx:FormItem label="   Currency Code">
+					<s:DropDownList id="tgtDropDown" width="200" prompt="Select a Currency"/>
+				</mx:FormItem>
+				
+			</s:Form>
+		</s:Panel>
+	</s:HGroup>
+	<s:HGroup width="100%" height="10%" bottom="10" verticalAlign="middle" horizontalAlign="right" paddingRight="5">
+		<s:Button id="nextButton" label="Next" click="dataEntered_handler()"/>
+		<s:Button id="cancelButton" label="Cancel"/>
+	</s:HGroup>
+</s:BorderContainer>
