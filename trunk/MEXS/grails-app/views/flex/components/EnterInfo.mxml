@@ -2,9 +2,18 @@
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				   xmlns:s="library://ns.adobe.com/flex/spark" 
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
-				   borderVisible="false">
+				   borderVisible="false" creationComplete="loadCurrencies()">
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<!-- Place non-visual elements (e.g., services, value objects) here -->	
+		<mx:CurrencyValidator id="currencyValid" source="{srcAmount}" property="text" precision="2"
+							  minValue="1"/>
+		<mx:Validator id="firstValid" required="true" source="{firstName}" property="text" />
+		<mx:Validator id="lastValid" required="true" source="{lastName}" property="text"/>
+		<mx:Validator id="passportValid" required="true" source="{passportNum}" property="text"/>
+		<mx:NumberValidator id="srcValid" required="true" source="{srcDropDown}" property="selectedIndex"
+					  minValue="0" lowerThanMinError="Select a Currency Symbol"/>
+		<mx:NumberValidator id="tgtValid" required="true" source="{tgtDropDown}" property="selectedIndex"
+					  minValue="0" lowerThanMinError="Select a Currency Symbol"/>
 	</fx:Declarations>
 	
 	<fx:Metadata>
@@ -16,19 +25,41 @@
 			import mexs.Currency;
 			import mexs.Transaction;
 			
+			import mx.collections.ArrayCollection;
+			import mx.events.ValidationResultEvent;
+			
 			import org.granite.tide.Component;
-
+			import org.granite.tide.events.TideResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
 			private var dummyCurrency:Currency;
 			private var dummyTransaction:Transaction;
 			
 			[In("mexs.transactionController")]
 			public var transactionController:Component;
 			
+			[In("mexs.currencyController")]
+			public var currencyController:Component;
+			
+			[Bindable] [In]
+			public var currencyList:ArrayCollection;
+			
+			[Bindable] [In]
+			public var maxSourceValue:Number;
+			
 			private function dataEntered_handler():void
 			{
-				this.parentApplication.currentState = 'verifyInfo';
-				this.parentApplication.verifyComponent.loadEnteredData(firstName.text, lastName.text, passportNum.text, country.text,
-																	srcAmount.text, srcDropDown.selectedItem, tgtDropDown.selectedItem);
+				if((firstValid.validate().type == ValidationResultEvent.VALID) &&
+					(lastValid.validate().type == ValidationResultEvent.VALID) &&
+					(passportValid.validate().type == ValidationResultEvent.VALID) &&
+					(srcValid.validate().type == ValidationResultEvent.VALID) &&
+					(tgtValid.validate().type == ValidationResultEvent.VALID) &&
+					(currencyValid.validate().type == ValidationResultEvent.VALID)){
+					this.parentApplication.currentState = 'verifyInfo';
+					this.parentApplication.verifyComponent.loadEnteredData(firstName.text, lastName.text, passportNum.text, country.text,
+						srcAmount.text, srcDropDown.selectedItem.currencySymbol, tgtDropDown.selectedItem.currencySymbol);
+				}
 			}
 			
 			public function clearFields():void
@@ -38,26 +69,49 @@
 				passportNum.text = "";
 				country.text = "";
 				srcAmount.text = "";
-				srcDropDown.selectedItem = "";
-				tgtDropDown.selectedItem = "";
+				srcDropDown.selectedItem = -1;
+				tgtDropDown.selectedItem = -1;
 			}
+			
+			public function loadCurrencies():void
+			{
+				currencyController.listCurrencies(currencyResult);
+			}
+			
+			private function currencyResult(event:TideResultEvent):void
+			{
+				srcDropDown.dataProvider = currencyList;
+				tgtDropDown.dataProvider = currencyList;
+			}
+			
+			protected function srcDropDown_changeHandler(event:IndexChangeEvent):void
+			{
+				currencyController.getMaxSourceValue({srcCode:srcDropDown.selectedItem.currencySymbol}, maxSourceValueResult)
+			}
+			
+			private function maxSourceValueResult(event:TideResultEvent):void
+			{
+				currencyValid.maxValue = maxSourceValue;
+				currencyValid.exceedsMaxError="Enter an amount less than " + maxSourceValue;
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:Button id="multipleCurrenciesButton" label="Multiple Currencies" left="5"/>
+	<s:Button id="multipleCurrenciesButton" label="Multiple Currencies" left="5" top="25"/>
 	<s:HGroup width="100%" height="60%" verticalCenter="0" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 		<s:Panel id="patronInfo" width="100%" height="100%" title="Patron Information">
 			<s:Form id="patronForm">
 				<s:FormHeading fontSize="10" label="Enter Patron Information"/>
-				<mx:FormItem label="First Name">
+				<mx:FormItem label="First Name" required="true">
 					<s:TextInput id="firstName" width="200"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Last Name">
+				<mx:FormItem label="Last Name" required="true">
 					<s:TextInput id="lastName" width="200"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Passport Number">
+				<mx:FormItem label="Passport Number" required="true">
 					<s:TextInput id="passportNum" width="200"/>
 				</mx:FormItem>
 				
@@ -70,15 +124,16 @@
 			<s:Form id="currencyForm">
 				<s:FormHeading fontSize="10" label="Enter Currency Information"/>
 				<mx:FormItemLabel text="Source Currency" fontWeight="bold"/>
-				<mx:FormItem label="   Amount">
+				<mx:FormItem label="   Amount" required="true">
 					<s:TextInput id="srcAmount" width="200"/>
 				</mx:FormItem>
-				<mx:FormItem label="   Currency Code">
-					<s:DropDownList id="srcDropDown" width="200" prompt="Select a Currency"/>
+				<mx:FormItem label="   Currency Code" required="true">
+					<s:DropDownList id="srcDropDown" width="200" prompt="Select a Currency" 
+									labelField="currencySymbol" change="srcDropDown_changeHandler(event)"/>
 				</mx:FormItem>
 				<mx:FormItemLabel text="Target Currency" fontWeight="bold"/>
-				<mx:FormItem label="   Currency Code">
-					<s:DropDownList id="tgtDropDown" width="200" prompt="Select a Currency"/>
+				<mx:FormItem label="   Currency Code" required="true">
+					<s:DropDownList id="tgtDropDown" width="200" prompt="Select a Currency" labelField="currencySymbol"/>
 				</mx:FormItem>
 				
 			</s:Form>

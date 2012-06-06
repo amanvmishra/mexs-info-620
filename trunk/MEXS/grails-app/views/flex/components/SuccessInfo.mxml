@@ -5,19 +5,54 @@
 				   borderVisible="false">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:CurrencyFormatter id="amount" precision="2"  
+							  rounding="none" 
+							  decimalSeparatorTo="." 
+							  thousandsSeparatorTo="," 
+							  useThousandsSeparator="true" 
+							  useNegativeSign="true"
+							  currencySymbol=""/> 
 	</fx:Declarations>
+	
+	<fx:Metadata>
+		[Name]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mexs.Transaction;
+			
+			import mx.collections.ArrayCollection;
+			
+			
+			private var dummyTransaction:Transaction;
+			
+			
+			public function displayTransaction(transactions:ArrayCollection):void
+			{
+				grid.dataProvider = transactions;
+			}
+			
+			public function formatAmount(item:Object, column:DataGridColumn):String 
+			{ 
+				return amount.format(item.totalTransactionAmount);
+			} 
+
+		]]>
+	</fx:Script>
 	<s:Label text="Transaction Completed Successfully" fontWeight="bold" fontSize="18"/>
 	
 	<s:VGroup width="100%" height="75%" bottom="10" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
 		<s:Label text="Transaction Details" fontSize="14"/>
-		<mx:DataGrid id="grid" color="0x323232" width="100%">
+		<mx:DataGrid id="grid" color="0x323232" width="100%" >
 			<mx:columns>
-				<mx:DataGridColumn dataField="name" headerText="Patron Name"/>
-				<mx:DataGridColumn dataField="origin" headerText="Origin Country"/>
-				<mx:DataGridColumn dataField="srcCode" headerText="Source Currency Code"/>
-				<mx:DataGridColumn dataField="srcAmt" headerText="Source Amount"/>
-				<mx:DataGridColumn dataField="commission" headerText="Commission Rate"/>
-				<mx:DataGridColumn dataField="total" headerText="Total Amount"/>
+				<mx:DataGridColumn dataField="patronID.firstName" headerText="Patron First Name" />
+				<mx:DataGridColumn dataField="patronID.lastName" headerText="Patron Last Name" />
+				<mx:DataGridColumn dataField="patronID.country" headerText="Origin Country"/>
+				<mx:DataGridColumn dataField="sourceCurrencyID.currencySymbol" headerText="Source Currency Symbol"/>
+				<mx:DataGridColumn dataField="sourceAmount" headerText="Source Amount"/>
+				<mx:DataGridColumn dataField="commissionRate" headerText="Commission Rate"/>
+				<mx:DataGridColumn dataField="totalTransactionAmount" headerText="Total Amount" labelFunction="formatAmount"/>
 			</mx:columns>
 		</mx:DataGrid>
 	</s:VGroup>

@@ -5,13 +5,71 @@
 				   borderVisible="true">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:CurrencyFormatter id="amount" precision="2"  
+							  rounding="none" 
+							  decimalSeparatorTo="." 
+							  thousandsSeparatorTo="," 
+							  useThousandsSeparator="true" 
+							  useNegativeSign="true"
+							  currencySymbol=""/> 
 	</fx:Declarations>
+	
+	<fx:Metadata>
+		[Name]
+	</fx:Metadata>
 	
 	<fx:Script>
 		<![CDATA[
+			import mexs.Currency;
+			import mexs.Patron;
+			import mexs.Transaction;
+			
+			import mx.collections.ArrayCollection;
+			
+			import org.granite.tide.Component;
+			import org.granite.tide.events.TideResultEvent;
+			
+			[In("mexs.currencyController")]
+			public var currencyController:Component;
+			
+			[In("mexs.transactionController")]
+			public var transactionController:Component;
+			
+			[Bindable] [In]
+			public var conversionInfo:String;
+			
+			[Bindable] [In]
+			public var totalAmount:Number;
+			
+			[Bindable] [In]
+			public var totalCommission:Number;
+			
+			[Bindable] [In]
+			public var totalMinusCommission:Number;
+			
+			[Bindable] [In]
+			public var transactions:ArrayCollection;
+			
+			private var sourceCurrency:Currency = new Currency();
+			private var targetCurrency:Currency = new Currency();
+			private var transaction:Transaction = new Transaction;
+			private var patron:Patron = new Patron();
+			
+			var toFixed:Function = function(number:Number, factor:Number) { 
+				return (Math.round(number *= factor)/factor); 
+			} 
+
+			
 			private function submit_handler():void
 			{
+				transactionController.createTransaction({patron:patron, sourceCurrency:sourceCurrency, targetCurrency:targetCurrency, 
+					transaction:transaction}, transactionComplete);	
+			}
+			
+			private function transactionComplete(event:TideResultEvent):void
+			{
 				this.parentApplication.currentState = 'successInfo';
+				this.parentApplication.successComponent.displayTransaction(transactions);
 				resetData();
 			}
 			
@@ -50,9 +108,53 @@
 				lastName.text += last;
 				passport.text += passportNum;
 				country.text += patronCountry;
-				srcAmount.text += srcAmt;
+				srcAmount.text += amount.format(srcAmt);
 				srcCurrency.text += srcCode;
 				tgtCurrency.text += tgtCode;
+				
+				patron.firstName = first;
+				patron.lastName = last;
+				patron.passportNumber = Number(passportNum);
+				patron.country = patronCountry;
+
+				sourceCurrency.currencySymbol = srcCode;
+				targetCurrency.currencySymbol = tgtCode;
+				
+				transaction.dateOfTransaction = new Date();
+				transaction.sourceAmount = Number(srcAmt);
+				
+				currencyController.getConversionInfo({source:srcCode, target:tgtCode}, conversionResult);
+				transactionController.calcTotalAmount({srcAmt:srcAmt, srcCode:srcCode, tgtCode:tgtCode}, totalAmountResult);
+			}
+			
+			private function conversionResult(event:TideResultEvent):void
+			{
+				conversion.text += conversionInfo;
+			}
+			
+			private function totalAmountResult(event:TideResultEvent):void
+			{
+				totalNoCommission.text += amount.format(toFixed(totalAmount,100)) + " " + targetCurrency.currencySymbol;
+				
+				transaction.totalTargetAmount = totalAmount;
+				
+				transactionController.calcCommission({totalAmount:totalAmount}, commissionResult);
+			}
+			
+			private function commissionResult(event:TideResultEvent):void
+			{
+				commission.text += "$" + amount.format(toFixed(totalCommission, 100))
+				
+				transaction.commissionRate = totalCommission;
+				
+				transactionController.calcTotalMinusCommission({totalCommission:totalCommission, totalAmount:totalAmount, 
+					targetCode:targetCurrency.currencySymbol}, totalMinusCommissionResult);
+			}
+			
+			private function totalMinusCommissionResult(event:TideResultEvent):void
+			{
+				transaction.totalTransactionAmount = totalMinusCommission;
+				total.text += amount.format(toFixed(totalMinusCommission, 100)) + " " + targetCurrency.currencySymbol;
 			}
 		]]>
 	</fx:Script>
