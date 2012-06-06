@@ -10,6 +10,7 @@
 		<mx:Validator id="firstValid" required="true" source="{firstName}" property="text" />
 		<mx:Validator id="lastValid" required="true" source="{lastName}" property="text"/>
 		<mx:Validator id="passportValid" required="true" source="{passportNum}" property="text"/>
+		<mx:Validator id="countryValid" required="true" source="{country}" property="text"/>
 		<mx:NumberValidator id="srcValid" required="true" source="{srcDropDown}" property="selectedIndex"
 					  minValue="0" lowerThanMinError="Select a Currency Symbol"/>
 		<mx:NumberValidator id="tgtValid" required="true" source="{tgtDropDown}" property="selectedIndex"
@@ -55,6 +56,7 @@
 					(passportValid.validate().type == ValidationResultEvent.VALID) &&
 					(srcValid.validate().type == ValidationResultEvent.VALID) &&
 					(tgtValid.validate().type == ValidationResultEvent.VALID) &&
+					(countryValid.validate().type == ValidationResultEvent.VALID) &&
 					(currencyValid.validate().type == ValidationResultEvent.VALID)){
 					this.parentApplication.currentState = 'verifyInfo';
 					this.parentApplication.verifyComponent.loadEnteredData(firstName.text, lastName.text, passportNum.text, country.text,
@@ -115,7 +117,7 @@
 					<s:TextInput id="passportNum" width="200"/>
 				</mx:FormItem>
 				
-				<mx:FormItem label="Country">
+				<mx:FormItem label="Country" required="true">
 					<s:TextInput id="country" width="200"/>
 				</mx:FormItem>
 			</s:Form>
