@@ -1,9 +1,34 @@
 package mexs
 
+import org.granite.tide.annotations.TideEnabled
+
+@TideEnabled
 class CurrencyController {
+	
+	List currencyList
+	String conversionInfo
+	int maxSourceValue
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	def listCurrencies = {
+		currencyList = Currency.list()
+	}
+	
+	def getConversionInfo = {
+		def sourceCurrency = Currency.findByCurrencySymbol(params.source)
+		def targetCurrency = Currency.findByCurrencySymbol(params.target)
+		
+		conversionInfo = sourceCurrency.buyingRate + " " + sourceCurrency.currencySymbol +
+							" = " + targetCurrency.buyingRate + " " + targetCurrency.currencySymbol
+	}
+	
+	def getMaxSourceValue = {
+		def sourceCurrency = Currency.findByCurrencySymbol(params.srcCode)
+		
+		maxSourceValue = 3000 / sourceCurrency.buyingRate
+	}
+	
     def index = {
         redirect(action: "list", params: params)
     }
