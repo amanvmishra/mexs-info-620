@@ -55,12 +55,14 @@ class TransactionController {
 		def transaction = params.transaction
 		
 		transaction.terminalID = Terminal.findByTerminalID(1)
-		transaction.patronID = patron
+		transaction.patronID = Patron.findByPassportNumber(params.patron.passportNumber)
 		transaction.employeeID = Employee.findByEmployeeID(1)
 		transaction.sourceCurrencyID = source
 		transaction.targetCurrencyID = target
 		
 		transactions.add(transaction)
+		
+		transaction.save(flush:true)
 		
 		[transactions : transactions]
 	}
