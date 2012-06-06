@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   preinitialize="Spring.getInstance().initApplication(); this.currentState = 'enterInfo'" xmlns:components="components.*">
+	<fx:Style source="MEXS.css"/>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import org.granite.tide.spring.Spring;
+			import org.granite.tide.spring.Context;
+			import org.granite.tide.events.TideResultEvent;    
+			private var tideContext:Context = Spring.getInstance().getSpringContext();
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State id="enterInfo" name="enterInfo"/>
+		<s:State id="verifyInfo" name="verifyInfo"/>
+		<s:State id="successInfo" name="successInfo"/>
+	</s:states>
+	
+	<s:BorderContainer id="header" width="95%" height="10%" horizontalCenter="0" top="10"
+					   cornerRadius="2" borderWeight="2" borderColor="0x000000" dropShadowVisible="true"
+					   backgroundColor="0x55AE3A">
+		<s:Label text="MEXS" fontSize="24" verticalCenter="0" horizontalCenter="0"/>
+	</s:BorderContainer>    
+	<s:BorderContainer id="body" width="95%" height="75%" horizontalCenter="0"
+					   verticalCenter="0" borderVisible="false" left="5">
+		<mx:Accordion id="nav" width="20%" height="90%" verticalCenter="0">
+			<s:NavigatorContent width="100%" height="100%" label="Transactions">
+				<mx:LinkButton left="5" top="5" label="Currency Exchange" color="0x3380DD" textDecoration="underline" 
+							   fontWeight="normal" icon="@Embed('assets/arrow_icon_sm.png')" />
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Patrons">
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Employees">
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Help">
+			</s:NavigatorContent>
+		</mx:Accordion>
+		<components:EnterInfo id="enterComponent" includeIn="enterInfo" width="75%" height="90%" borderVisible="false" 
+							  verticalCenter="0" right="5"/>
+		<components:VerifyInfo id="verifyComponent" includeIn="verifyInfo" width="75%" height="90%" borderVisible="false" 
+							   verticalCenter="0" right="5"/>
+		<components:SuccessInfo id="successComponent" includeIn="successInfo" width="75%" height="90%" borderVisible="false" 
+								verticalCenter="0" right="5"/>
+	</s:BorderContainer>
+	<s:BorderContainer id="footer" width="95%" height="5%" horizontalCenter="0" bottom="10"
+					   cornerRadius="2" borderWeight="2" borderColor="0x000000" dropShadowVisible="true"
+					   backgroundColor="0x55AE3A">
+		<s:HGroup verticalCenter="0" horizontalCenter="0" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:Label text="About"/>
+			<mx:VRule height="10"/>
+			<s:Label text="Terms of Use"/>
+			<mx:VRule height="10"/>
+			<s:Label text="Contact Us"/>
+		</s:HGroup>
+	</s:BorderContainer>
+</s:Application>

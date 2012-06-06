@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   borderVisible="true">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			private function submit_handler():void
+			{
+				this.parentApplication.currentState = 'successInfo';
+				resetData();
+			}
+			
+			private function back_handler():void
+			{
+				this.parentApplication.currentState = 'enterInfo';
+				resetData();
+			}
+			
+			private function cancel_handler():void
+			{
+				this.parentApplication.currentState = 'enterInfo';
+				this.parentApplication.enterComponent.clearFields();
+				resetData();
+			}
+			
+			private function resetData():void
+			{
+				firstName.text = "First Name: ";
+				lastName.text = "Last Name: ";
+				passport.text = "Passport Number: ";
+				country.text = "Country: ";
+				srcAmount.text = "   Amount: ";
+				srcCurrency.text = "   Currency Code: ";
+				tgtCurrency.text = "  Currency Code: ";
+				conversion.text = "Conversion Rate: ";
+				commission.text = "Commission Rate: ";
+				totalNoCommission.text = "Total Target Amount Without Commission: ";
+				total.text = "Total Target Amount: ";
+			}
+			
+			public function loadEnteredData(first:String, last:String, passportNum:String, patronCountry:String,
+													srcAmt:String, srcCode:String, tgtCode:String):void
+			{
+				firstName.text += first;
+				lastName.text += last;
+				passport.text += passportNum;
+				country.text += patronCountry;
+				srcAmount.text += srcAmt;
+				srcCurrency.text += srcCode;
+				tgtCurrency.text += tgtCode;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Label text="Verify Information" fontWeight="bold" fontSize="18" paddingLeft="10" paddingTop="10"/>
+	<s:VGroup width="100%" height="85%" bottom="10" left="10" right="10">
+		<s:BorderContainer width="100%" height="100%" borderVisible="false">
+			<s:VGroup left="20">
+			<s:BorderContainer  cornerRadius="2" borderWeight="2" borderColor="0x000000" dropShadowVisible="true"
+								backgroundColor="0x1874CD">
+				<s:Label text="Patron Information" fontSize="14" color="0XFFFFFF" verticalCenter="0" horizontalCenter="0"/>
+			</s:BorderContainer>
+			<s:Label id="firstName" text="First Name: " fontSize="12" verticalCenter="0" horizontalCenter="0" paddingTop="5"/>
+			<s:Label id="lastName" text="Last Name: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+			<s:Label id="passport" text="Passport Number: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+			<s:Label id="country" text="Country: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+			</s:VGroup>
+			<s:VGroup right="20">
+				<s:BorderContainer  cornerRadius="2" borderWeight="2" borderColor="0x000000" dropShadowVisible="true"
+									backgroundColor="0x1874CD">
+					<s:Label text="Currency Information" fontSize="14" color="0XFFFFFF" verticalCenter="0" horizontalCenter="0"/>
+				</s:BorderContainer>
+				<s:Label text="Source Currency " fontSize="12" verticalCenter="0" horizontalCenter="0" paddingTop="5"/>
+				<s:Label id="srcAmount" text="   Amount: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+				<s:Label id="srcCurrency" text="   Currency Code: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+				<s:Label text="Target Currency " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+				<s:Label id="tgtCurrency" text="   Currency Code: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+			</s:VGroup>
+		</s:BorderContainer>
+		<s:BorderContainer width="100%" height="100%" borderVisible="false">
+			<s:VGroup horizontalCenter="0">
+				<s:BorderContainer  cornerRadius="2" borderWeight="2" borderColor="0x000000" dropShadowVisible="true"
+									backgroundColor="0x1874CD">
+					<s:Label text="Total Transaction Information" fontSize="14" color="0XFFFFFF" verticalCenter="0" horizontalCenter="0"/>
+				</s:BorderContainer>
+				<s:Label id="conversion" text="Conversion Rate: " fontSize="12" verticalCenter="0" horizontalCenter="0" paddingTop="5"/>
+				<s:Label id="commission" text="Commission Amount: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+				<s:Label id="totalNoCommission" text="Total Target Amount Without Commission: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+				<s:Label id="total" text="Total Target Amount: " fontSize="12" verticalCenter="0" horizontalCenter="0"/>
+			</s:VGroup>
+		</s:BorderContainer>
+	</s:VGroup>
+	<s:HGroup width="100%" height="10%" bottom="10" verticalAlign="middle" horizontalAlign="right" paddingRight="5">
+		<s:Button id="submitButton" label="Submit" click="submit_handler()"/>
+		<s:Button id="backButton" label="Back" click="back_handler()"/>
+		<s:Button id="cancelButton" label="Cancel" click="cancel_handler()"/>
+	</s:HGroup>
+</s:BorderContainer>
