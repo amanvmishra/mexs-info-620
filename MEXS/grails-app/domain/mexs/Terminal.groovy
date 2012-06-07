@@ -12,5 +12,6 @@ class Terminal implements java.io.Serializable {
 	
 	static mapping = {
 		id name: 'terminalID'
+		id generator: 'assigned'
 	}
 }

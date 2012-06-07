@@ -1,5 +1,7 @@
 package mexs
 
+import grails.validation.ValidationException
+
 class LoadDbService {
 
 	def serviceMethod() {
@@ -26,7 +28,9 @@ class LoadDbService {
 			currency.currencyName = it[3]
 			currency.countryName = it[4]
 			currency.currencySymbol = it[5]
-			currency.save(flush:true)
+			if(Currency.findByCurrencyID(currency.currencyID) == null){
+				currency.save()
+			}
 		}
 		
 		new File(rootDir +  'Bank.csv').toCsvReader(['skipLines': 1]).eachLine{
@@ -36,21 +40,27 @@ class LoadDbService {
 			bank.address = it[2]
 			bank.phone = it[3]
 			bank.url = it[4]
-			bank.save(flush:true)
+			if(Bank.findByBankID(bank.bankID) == null){
+				bank.save()
+			}
 		}
 		
 		new File(rootDir +  'Terminal.csv').toCsvReader(['skipLines': 1]).eachLine{
 			def terminal = new Terminal()
 			terminal.terminalID = it[0].toInteger()
 			terminal.bankID = Bank.findByBankID(it[1].toInteger())
-			terminal.save(flush:true)
+			if(Terminal.findByTerminalID(terminal.terminalID) == null){
+				terminal.save()
+			}
 		}
 		
 		new File(rootDir +  'EmployeeRole.csv').toCsvReader(['skipLines': 1]).eachLine{
 			def employeeRole = new EmployeeRole()
 			employeeRole.roleID = it[0].toInteger()
 			employeeRole.roleName = it[1]
-			employeeRole.save(flush:true)
+			if(EmployeeRole.findByRoleID(employeeRole.roleID) == null){
+				employeeRole.save()
+			}
 		}
 		
 		new File(rootDir +  'Patron.csv').toCsvReader(['skipLines': 1]).eachLine{
@@ -61,7 +71,9 @@ class LoadDbService {
 			patron.passportNumber = it[3].toInteger()
 			patron.dateOfBirth = new Date().parse("MM/DD/YYYY", it[4])
 			patron.country = it[5]
-			patron.save(flush:true)
+			if(Patron.findByPatronID(patron.patronID) == null){
+				patron.save()
+			}
 		}
 		
 		new File(rootDir +  'Employee.csv').toCsvReader(['skipLines': 1]).eachLine{
@@ -72,7 +84,9 @@ class LoadDbService {
 			employee.password = it[3]
 			employee.firstName = it[4]
 			employee.lastName = it[5]
-			employee.save(flush:true)
+			if(Employee.findByEmployeeID(employee.employeeID) == null){
+				employee.save()
+			}
 		}
 	}
 }

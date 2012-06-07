@@ -13,5 +13,6 @@ class EmployeeRole implements java.io.Serializable {
 	
 	static mapping = {
 		id name: 'roleID'
+		id generator: 'assigned'
 	}
 }

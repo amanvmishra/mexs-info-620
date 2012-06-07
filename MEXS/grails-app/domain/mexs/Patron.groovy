@@ -18,5 +18,6 @@ class Patron implements java.io.Serializable {
 	
 	static mapping = {
 		id name: 'patronID'
+		id generator: 'assigned'
 	}
 }
