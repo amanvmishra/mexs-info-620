@@ -66,8 +66,8 @@ package mexs {
 		}
     
     	public static const meta_constraints:Array = [
-    		{ property: "country" }, 
     		{ property: "dateOfBirth" }, 
+    		{ property: "country" }, 
     		{ property: "firstName" }, 
     		{ property: "lastName" }, 
     		{ property: "passportNumber" }, 

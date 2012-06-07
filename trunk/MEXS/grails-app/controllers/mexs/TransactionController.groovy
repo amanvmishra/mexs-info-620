@@ -50,19 +50,24 @@ class TransactionController {
 	def createTransaction = {
 		def transactions = []
 		def patron = params.patron
+		
 		def source = Currency.findByCurrencySymbol(params.sourceCurrency.currencySymbol)
 		def target = Currency.findByCurrencySymbol(params.targetCurrency.currencySymbol)
 		def transaction = params.transaction
 		
+		if(Patron.findByLastNameAndPassportNumber(patron.lastName, patron.passportNumber) == null){
+			patron.save(flush:true)
+		}
+			
 		transaction.terminalID = Terminal.findByTerminalID(1)
-		transaction.patronID = Patron.findByPassportNumber(params.patron.passportNumber)
+		transaction.patronID = Patron.findByLastNameAndPassportNumber(patron.lastName, patron.passportNumber)
 		transaction.employeeID = Employee.findByEmployeeID(1)
 		transaction.sourceCurrencyID = source
 		transaction.targetCurrencyID = target
 		
-		transactions.add(transaction)
-		
 		transaction.save(flush:true)
+		
+		transactions.add(transaction)
 		
 		[transactions : transactions]
 	}

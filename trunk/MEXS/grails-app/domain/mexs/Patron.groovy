@@ -4,7 +4,7 @@ import java.util.Date;
 
 class Patron implements java.io.Serializable {
 
-  	int patronID
+	int patronID
 	String lastName
 	String firstName
 	int passportNumber
@@ -14,10 +14,10 @@ class Patron implements java.io.Serializable {
 	static hasMany = [transactions : Transaction]
 	
     static constraints = {
+		dateOfBirth nullable: true
     }
 	
 	static mapping = {
 		id name: 'patronID'
-		id generator: 'assigned'
 	}
 }

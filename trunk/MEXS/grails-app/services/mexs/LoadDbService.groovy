@@ -29,7 +29,7 @@ class LoadDbService {
 			currency.countryName = it[4]
 			currency.currencySymbol = it[5]
 			if(Currency.findByCurrencyID(currency.currencyID) == null){
-				currency.save()
+				currency.save(flush:true)
 			}
 		}
 		
@@ -41,7 +41,7 @@ class LoadDbService {
 			bank.phone = it[3]
 			bank.url = it[4]
 			if(Bank.findByBankID(bank.bankID) == null){
-				bank.save()
+				bank.save(flush:true)
 			}
 		}
 		
@@ -50,7 +50,7 @@ class LoadDbService {
 			terminal.terminalID = it[0].toInteger()
 			terminal.bankID = Bank.findByBankID(it[1].toInteger())
 			if(Terminal.findByTerminalID(terminal.terminalID) == null){
-				terminal.save()
+				terminal.save(flush:true)
 			}
 		}
 		
@@ -59,20 +59,7 @@ class LoadDbService {
 			employeeRole.roleID = it[0].toInteger()
 			employeeRole.roleName = it[1]
 			if(EmployeeRole.findByRoleID(employeeRole.roleID) == null){
-				employeeRole.save()
-			}
-		}
-		
-		new File(rootDir +  'Patron.csv').toCsvReader(['skipLines': 1]).eachLine{
-			def patron = new Patron()
-			patron.patronID = it[0].toInteger()
-			patron.lastName = it[1]
-			patron.firstName = it[2]
-			patron.passportNumber = it[3].toInteger()
-			patron.dateOfBirth = new Date().parse("MM/DD/YYYY", it[4])
-			patron.country = it[5]
-			if(Patron.findByPatronID(patron.patronID) == null){
-				patron.save()
+				employeeRole.save(flush:true)
 			}
 		}
 		
@@ -85,7 +72,7 @@ class LoadDbService {
 			employee.firstName = it[4]
 			employee.lastName = it[5]
 			if(Employee.findByEmployeeID(employee.employeeID) == null){
-				employee.save()
+				employee.save(flush:true)
 			}
 		}
 	}
