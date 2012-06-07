@@ -18,5 +18,6 @@ class Currency implements java.io.Serializable {
 	
 	static mapping = {
 		id name: 'currencyID'
+		id generator: 'assigned'
 	}
 }

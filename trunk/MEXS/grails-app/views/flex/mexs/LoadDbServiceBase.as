@@ -49,17 +49,6 @@ package mexs {
                 throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
         }    
         
-        public function isTransactional(resultHandler:Object = null, faultHandler:Function = null):void {
-            if (faultHandler != null)
-                callProperty("isTransactional", resultHandler, faultHandler);
-            else if (resultHandler is Function || resultHandler is ITideResponder)
-                callProperty("isTransactional", resultHandler);
-            else if (resultHandler == null)
-                callProperty("isTransactional");
-            else
-                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
-        }    
-        
         public function serviceMethod(resultHandler:Object = null, faultHandler:Function = null):void {
             if (faultHandler != null)
                 callProperty("serviceMethod", resultHandler, faultHandler);
@@ -67,6 +56,17 @@ package mexs {
                 callProperty("serviceMethod", resultHandler);
             else if (resultHandler == null)
                 callProperty("serviceMethod");
+            else
+                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
+        }    
+        
+        public function isTransactional(resultHandler:Object = null, faultHandler:Function = null):void {
+            if (faultHandler != null)
+                callProperty("isTransactional", resultHandler, faultHandler);
+            else if (resultHandler is Function || resultHandler is ITideResponder)
+                callProperty("isTransactional", resultHandler);
+            else if (resultHandler == null)
+                callProperty("isTransactional");
             else
                 throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
         }    

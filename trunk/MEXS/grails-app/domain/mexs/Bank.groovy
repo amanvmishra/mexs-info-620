@@ -19,5 +19,6 @@ class Bank implements java.io.Serializable {
 	
 	static mapping = {
 		id name: 'bankID'
+		id generator: 'assigned'
 	}
 }
