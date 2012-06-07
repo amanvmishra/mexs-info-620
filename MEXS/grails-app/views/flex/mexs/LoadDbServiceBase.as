@@ -27,6 +27,28 @@ package mexs {
                 throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
         }    
         
+        public function setRootDir(arg0:String, resultHandler:Object = null, faultHandler:Function = null):void {
+            if (faultHandler != null)
+                callProperty("setRootDir", arg0, resultHandler, faultHandler);
+            else if (resultHandler is Function || resultHandler is ITideResponder)
+                callProperty("setRootDir", arg0, resultHandler);
+            else if (resultHandler == null)
+                callProperty("setRootDir", arg0);
+            else
+                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
+        }    
+        
+        public function getRootDir(resultHandler:Object = null, faultHandler:Function = null):void {
+            if (faultHandler != null)
+                callProperty("getRootDir", resultHandler, faultHandler);
+            else if (resultHandler is Function || resultHandler is ITideResponder)
+                callProperty("getRootDir", resultHandler);
+            else if (resultHandler == null)
+                callProperty("getRootDir");
+            else
+                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
+        }    
+        
         public function getTransactional(resultHandler:Object = null, faultHandler:Function = null):void {
             if (faultHandler != null)
                 callProperty("getTransactional", resultHandler, faultHandler);
@@ -67,28 +89,6 @@ package mexs {
                 callProperty("isTransactional", resultHandler);
             else if (resultHandler == null)
                 callProperty("isTransactional");
-            else
-                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
-        }    
-        
-        public function setRootDir(arg0:String, resultHandler:Object = null, faultHandler:Function = null):void {
-            if (faultHandler != null)
-                callProperty("setRootDir", arg0, resultHandler, faultHandler);
-            else if (resultHandler is Function || resultHandler is ITideResponder)
-                callProperty("setRootDir", arg0, resultHandler);
-            else if (resultHandler == null)
-                callProperty("setRootDir", arg0);
-            else
-                throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
-        }    
-        
-        public function getRootDir(resultHandler:Object = null, faultHandler:Function = null):void {
-            if (faultHandler != null)
-                callProperty("getRootDir", resultHandler, faultHandler);
-            else if (resultHandler is Function || resultHandler is ITideResponder)
-                callProperty("getRootDir", resultHandler);
-            else if (resultHandler == null)
-                callProperty("getRootDir");
             else
                 throw new Error("Illegal argument to remote call (last argument should be Function or ITideResponder): " + resultHandler);
         }

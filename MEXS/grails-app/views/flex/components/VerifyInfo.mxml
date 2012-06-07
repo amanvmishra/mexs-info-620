@@ -29,6 +29,9 @@
 			import org.granite.tide.Component;
 			import org.granite.tide.events.TideResultEvent;
 			
+			[In("mexs.patronController")]
+			public var patronController:Component;
+			
 			[In("mexs.currencyController")]
 			public var currencyController:Component;
 			
@@ -52,7 +55,7 @@
 			
 			private var sourceCurrency:Currency = new Currency();
 			private var targetCurrency:Currency = new Currency();
-			private var transaction:Transaction = new Transaction;
+			private var transaction:Transaction = new Transaction();
 			private var patron:Patron = new Patron();
 			
 			var toFixed:Function = function(number:Number, factor:Number) { 
