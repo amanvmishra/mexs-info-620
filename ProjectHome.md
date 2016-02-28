@@ -1,0 +1,1 @@
+Proof of concept project for a bank's exchange of currency.
